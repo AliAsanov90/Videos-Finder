@@ -10,6 +10,11 @@ class App extends Component {
     selectedVideo: null
   };
 
+  // Make a search with a default query, such as 'buildings'
+  componentDidMount() {
+    this.onSearchSubmit('buildings');
+  }
+
   onVideoSelect = video => {
     this.setState({ selectedVideo: video });
   }
@@ -29,16 +34,25 @@ class App extends Component {
       }
     });
 
-    this.setState({ videos: res.data.items });
+    this.setState({ 
+      videos: res.data.items,
+      selectedVideo: res.data.items[0]     // play the first video in a list as a default video 
+    });
   }
 
   render() {
     return (
       <div className="ui container" style={{ width: '80%' }}>
         <SearchBar onSubmit={this.onSearchSubmit} />
-        <div className="content-wrapper" style={{ display: 'flex' }}>
-          <VideoDetails selectedVideo={this.state.selectedVideo} />
-          <VideosList videos={this.state.videos} onVideoSelect={this.onVideoSelect} /> 
+        <div className="ui grid">
+          <div className="ui row">
+            <div className="ten wide column">
+              <VideoDetails selectedVideo={this.state.selectedVideo} />
+            </div>
+            <div className="six wide column">
+              <VideosList videos={this.state.videos} onVideoSelect={this.onVideoSelect} /> 
+            </div>
+          </div>
         </div>
       </div>
     );
